@@ -50,15 +50,19 @@ class ProxyLLMBlueprint(pulumi.ComponentResource):
                 pulumi.warn(
                     "Couldn't infer prompt column name of the textgen deployment. Using default 'promptText'."
                 )
-            prompt_column_name = str(deployment.model.get("prompt", "promptText"))
-
+                prompt_column_name = "promptText"
+            else:
+                prompt_column_name = deployment.model.get("prompt")
+            
         llm_validation_id = get_update_or_create_custom_model_llm_validation(
+            name="afgadfgadfgghsrghsfgh",
             endpoint=dr_client.endpoint,
             token=dr_client.token,
             deployment_id=proxy_llm_deployment_id,
             prompt_column_name=prompt_column_name,
             target_column_name=target_column_name,
         )
+        # pulumi.info(f"{prompt_column_name}, {target_column_name} {llm_validation_id}")
         return str(llm_validation_id)
 
     def __init__(
